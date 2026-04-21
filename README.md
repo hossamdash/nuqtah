@@ -180,7 +180,7 @@ docker run -p 3000:3000 nuqtah:local
 
 ## Observability — New Relic
 
-New Relic is used for **log collection only**. `newrelic-logging` (Fluent Bit) is the only enabled component in the `nri-bundle` and is restricted to the `nuqtah` namespace — logs from all other namespaces are dropped before forwarding.
+New Relic is used for **log collection only**. it's configured via a helm chart in the `k8s/templates/new-relic-values.yaml` file, which is rendered by Terraform with the license key injected at deploy time.
 
 ### Secret management
 

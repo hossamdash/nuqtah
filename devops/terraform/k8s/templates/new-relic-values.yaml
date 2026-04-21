@@ -15,25 +15,16 @@ kube-state-metrics:
   # This is mandatory if `infrastructure.enabled` is set to `true` and the user does not provide its own instance of KSM version >=1.8 and <=2.0. Note, kube-state-metrics v2+ disables labels/annotations
   # metrics by default. You can enable the target labels/annotations metrics to be monitored by using the metricLabelsAllowlist/metricAnnotationsAllowList options described [here](https://github.com/prometheus-community/helm-charts/blob/159cd8e4fb89b8b107dcc100287504bb91bf30e0/charts/kube-state-metrics/values.yaml#L274) in
   # your Kubernetes clusters.
-  enabled: false
+  enabled: true
 
 nri-kube-events:
   # nri-kube-events.enabled -- Install the [`nri-kube-events` chart](https://github.com/newrelic/nri-kube-events/tree/main/charts/nri-kube-events)
-  enabled: false
+  enabled: true
 
 newrelic-logging:
   # newrelic-logging.enabled -- Install the [`newrelic-logging` chart](https://github.com/newrelic/helm-charts/tree/master/charts/newrelic-logging)
   enabled: true
-  fluentBit:
-    config:
-      # Filter logs to only collect from the nuqtah namespace.
-      # In normal (non-lowDataMode) the kubernetes filter leaves metadata nested under the
-      # 'kubernetes' key, so we reference it as $kubernetes['namespace_name'].
-      extraFilters: |
-        [FILTER]
-            Name    grep
-            Match   kube.*
-            Regex   $kubernetes['namespace_name'] ^nuqtah$
+  # fluentBit:
     # -- What path will be mounted to read logs from the node
     # linuxMountPath: /var
     # persistence:
@@ -82,7 +73,7 @@ global:
   # -- The cluster name for the Kubernetes cluster.
   cluster: k3s
 
-  # -- The license key for your New Relic Account. Injected at deploy time by Terraform from Secrets Manager.
+  # -- The license key for your New Relic Account. Injected at deploy time by Terraform
   licenseKey: "${newrelic_license_key}"
   # -- The license key for your New Relic Account. This will be preferred configuration option if both `insightsKey` and `customSecret` are specified.
   insightsKey: ""
