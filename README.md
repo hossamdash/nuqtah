@@ -170,8 +170,37 @@ docker run -p 3000:3000 nuqtah:local
 
 - **k3s is pre-installed** on the local machine (k3s kubeconfig at `/etc/rancher/k3s/k3s.yaml`).
 - **Docker is running** for Kumo and local image builds.
-- The GitHub repo (`hossamdash/nuqtah`) is either public or a read-only deploy key is added after `terraform apply`.
+- The GitHub repo is either public or a read-only deploy key is added after `terraform apply`.
 - A single-node k3s setup is sufficient for this assessment; no multi-AZ or HA configuration is needed.
 - Traefik (bundled with k3s) is used as the ingress controller — no annotation changes are needed.
 - No secret management infrastructure (External Secrets Operator, Secrets Manager) is required since the app has no runtime secrets.
 - Terraform state is stored in Kumo S3 (local). For production, replace Kumo with a real S3 bucket and remove the `skip_*` flags.
+
+---
+
+## Observability — New Relic
+
+New Relic is used for **log collection only**. `newrelic-logging` (Fluent Bit) is the only enabled component in the `nri-bundle` and is restricted to the `nuqtah` namespace — logs from all other namespaces are dropped before forwarding.
+
+### Secret management
+
+The New Relic license key is supplied as a Terraform variable via the environment. A `.envrc` file at `devops/terraform/k8s/.envrc` exports it as `TF_VAR_NEWRELIC_LICENSE_KEY`, which Terraform automatically picks up as `var.NEWRELIC_LICENSE_KEY`.
+
+`.envrc` is **git-ignored** (`devops/terraform/k8s/.gitignore`), so the real key is never committed. Use [direnv](https://direnv.net/) for automatic loading, or source it manually before running Terraform.
+
+### Deploy
+
+```bash
+cd devops/terraform/k8s
+
+# Option A — direnv (auto-sources .envrc on cd)
+# Option B — manual
+source .envrc   # exports TF_VAR_NEWRELIC_LICENSE_KEY
+
+terraform init && terraform apply
+
+# Trigger the CI/CD pipeline so the app is deployed and starts generating logs
+cd ../../..
+git tag v<version>
+git push origin v<version>
+```
