@@ -25,6 +25,7 @@ BUCKET="nuqtah-terraform-state"
 aws configure set profile.kumo.aws_access_key_id     test
 aws configure set profile.kumo.aws_secret_access_key test
 aws configure set profile.kumo.region                "$REGION"
+aws configure set profile.kumo.endpoint_url          "$ENDPOINT"
 
 # Create the S3 bucket for Terraform remote state
 aws --profile "$PROFILE" --endpoint-url "$ENDPOINT" \
