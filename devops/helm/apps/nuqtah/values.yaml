@@ -1,9 +1,8 @@
 nameOverride: "nuqtah"
-
 deployment:
   image:
     repository: hossamdash/nuqtah
-    tag: "latest"
+    tag: "v1.3"
   securityContext:
     capabilities:
       drop:
@@ -26,10 +25,8 @@ deployment:
     httpGet:
       path: /
       port: http
-
 service:
   port: 3000
-
 ingress:
   enabled: true
   className: "traefik"
