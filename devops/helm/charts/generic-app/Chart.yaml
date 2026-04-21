@@ -1,0 +1,9 @@
+apiVersion: v2
+name: generic-app
+description: A generic Helm chart for Kubernetes for when you have a docker container and don't want to write a helm chart
+
+type: application
+
+version: 0.1.1
+
+appVersion: "1.0.0"

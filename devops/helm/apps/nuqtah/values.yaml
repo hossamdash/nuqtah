@@ -1,0 +1,41 @@
+nameOverride: "nuqtah"
+
+deployment:
+  image:
+    repository: hossamdash/nuqtah
+    tag: "latest"
+  securityContext:
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 1000
+  resources:
+    limits:
+      cpu: 100m
+      memory: 64Mi
+    requests:
+      cpu: 50m
+      memory: 32Mi
+  livenessProbeEnabled: true
+  livenessProbe:
+    initialDelaySeconds: 5
+    periodSeconds: 30
+    failureThreshold: 3
+    httpGet:
+      path: /
+      port: http
+
+service:
+  port: 3000
+
+ingress:
+  enabled: true
+  className: "traefik"
+  annotations: {}
+  hosts:
+    - host: nuqtah.local
+      paths:
+        - path: /
+          pathType: Prefix

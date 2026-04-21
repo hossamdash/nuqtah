@@ -1,0 +1,97 @@
+# Default values for generic-app.
+nameOverride: ""
+fullnameOverride: ""
+
+deployment:
+  enabled: true
+  replicaCount: 1
+  image:
+    registry: "docker.io"
+    repository: nginx
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  imagePullSecrets: []
+  containerCommand: []
+  env: []
+  envFrom: []
+  initcontainers: {}
+  podAnnotations: {}
+  podLabels: {}
+  podSecurityContext: {}
+  securityContext: {}
+  volumes: []
+  volumeMounts: []
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  resources: {}
+  livenessProbeEnabled: false
+  livenessProbe:
+    httpGet:
+      path: /
+      port: http
+  readinessProbeEnabled: false
+  readinessProbe:
+    httpGet:
+      path: /
+      port: http
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+
+job:
+  enabled: false
+  replicaCount: 1
+  restartPolicy: never
+  image:
+    registry: "docker.io"
+    repository: nginx
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  imagePullSecrets: []
+  containerCommand: []
+  env: []
+  envFrom: []
+  initcontainers: {}
+  podAnnotations: {}
+  podLabels: {}
+  podSecurityContext: {}
+  securityContext: {}
+  volumes: []
+  volumeMounts: []
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  resources: {}
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
+secretStore:
+  kind: ClusterSecretStore
+  name: your-secret-store
+
+externalSecret:
+  # -- set to true to create an ExternalSecret resource (requires External Secrets Operator)
+  enabled: false
